@@ -168,7 +168,11 @@
             // 只要包含“鬼压床”或“睡眠瘫痪”就跳转
             if (val.includes('鬼压床') || val.includes('睡眠瘫痪')) {
                 window.location.href = 'wiki.html';
-            } else {
+            }
+            else if (val.includes('邮箱') || val.includes('电子邮箱') || val.includes('邮件')) {
+                alert('网络连接错误：无法连接到该关键词的服务器，请在正确的搜索栏搜索');
+            }
+            else {
                 alert('网络连接错误：无法连接到该关键词的服务器。');
             }
         }
