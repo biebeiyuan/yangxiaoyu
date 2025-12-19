@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的淘宝 - 已买到的宝贝</title>
+    <style>
+        /* === 全局重置 === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #fff;
+            font-size: 12px;
+            color: #3c3c3c;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3c3c3c;
+            cursor: pointer;
+        }
+
+        a:hover {
+            color: #f40;
+        }
+
+        /* === 顶部橙色条 === */
+        .site-nav {
+            background: #f5f5f5;
+            height: 30px;
+            line-height: 30px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+            padding: 0 50px;
+            color: #6c6c6c;
+        }
+
+        .top-header {
+            background: #ff4400;
+            height: 60px;
+            padding: 0 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .top-header h1 {
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .search-bar {
+            display: flex;
+        }
+
+        .search-bar input {
+            padding: 5px;
+            border: none;
+            width: 200px;
+            height: 30px;
+        }
+
+        .search-bar button {
+            background: #f5f5f5;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* === 主体布局 === */
+        .container {
+            width: 1100px;
+            margin: 20px auto;
+            display: flex;
+        }
+
+        /* 左侧侧边栏 */
+        .sidebar {
+            width: 150px;
+            flex-shrink: 0;
+        }
+
+        .sidebar dl {
+            margin-bottom: 20px;
+        }
+
+        .sidebar dt {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #f40;
+        }
+
+        .sidebar dd {
+            line-height: 28px;
+            padding-left: 10px;
+        }
+
+        .sidebar dd.active {
+            color: #f40;
+            font-weight: bold;
+        }
+
+        /* 右侧主内容 */
+        .main-content {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        /* 筛选 Tab */
+        .filter-tab {
+            border-bottom: 2px solid #e8e8e8;
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .filter-tab li {
+            padding: 0 20px;
+            height: 36px;
+            line-height: 36px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .filter-tab li.active {
+            border-bottom-color: #ff4400;
+            color: #ff4400;
+        }
+
+        .filter-tab li:hover {
+            color: #f40;
+        }
+
+        /* 订单表头 */
+        .order-table-head {
+            background: #f5f5f5;
+            border: 1px solid #e8e8e8;
+            height: 40px;
+            line-height: 40px;
+            display: flex;
+            text-align: center;
+            color: #3c3c3c;
+            margin-bottom: 15px;
+        }
+
+        .col-item {
+            flex: 4;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .col-price {
+            flex: 1;
+        }
+
+        .col-num {
+            flex: 1;
+        }
+
+        .col-op {
+            flex: 1;
+        }
+
+        .col-amount {
+            flex: 1.5;
+            border-left: 1px solid #e8e8e8;
+        }
+
+        .col-status {
+            flex: 1.5;
+            border-left: 1px solid #e8e8e8;
+        }
+
+        .col-trade {
+            flex: 1.5;
+            border-left: 1px solid #e8e8e8;
+        }
+
+        /* 订单卡片 */
+        .order-item {
+            border: 1px solid #ececec;
+            margin-bottom: 20px;
+        }
+
+        .order-item:hover {
+            border-color: #ccc;
+        }
+
+        .order-info-header {
+            background: #f1f1f1;
+            padding: 10px 20px;
+            color: #3c3c3c;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .shop-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: #f40;
+            color: white;
+            text-align: center;
+            line-height: 16px;
+            font-size: 12px;
+            margin-left: 5px;
+            border-radius: 2px;
+        }
+
+        .order-body {
+            display: flex;
+        }
+
+        .body-col {
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* 宝贝详情列 */
+        .body-item {
+            flex: 4;
+            text-align: left;
+            justify-content: flex-start;
+        }
+
+        .goods-img {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #eee;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .goods-desc {
+            flex: 1;
+        }
+
+        .goods-title {
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+
+        .goods-props {
+            color: #9e9e9e;
+        }
+
+        /* 价格数量列 */
+        .body-price {
+            flex: 1;
+            font-family: verdana;
+        }
+
+        .body-num {
+            flex: 1;
+        }
+
+        .body-op {
+            flex: 1;
+        }
+
+        /* 状态列 */
+        .body-amount {
+            flex: 1.5;
+            border-left: 1px solid #ececec;
+            flex-direction: column;
+        }
+
+        .body-status {
+            flex: 1.5;
+            border-left: 1px solid #ececec;
+            flex-direction: column;
+            color: #6c6c6c;
+        }
+
+        .body-trade {
+            flex: 1.5;
+            border-left: 1px solid #ececec;
+            flex-direction: column;
+        }
+
+        .price-bold {
+            font-weight: bold;
+            font-family: verdana;
+        }
+
+        .status-success {
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* 按钮 */
+        .btn-ghost {
+            border: 1px solid #dcdcdc;
+            background: #fff;
+            padding: 4px 10px;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: 0.2s;
+        }
+
+        .btn-ghost:hover {
+            border-color: #f40;
+            color: #f40;
+        }
+
+        .btn-primary {
+            border: 1px solid #f40;
+            background: #fff0e8;
+            color: #f40;
+            padding: 4px 10px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        /* === 异方晶特效 (红石) === */
+        .crystal-stone {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff0000, #800000);
+            transform: rotate(45deg);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            border: 1px solid #ff9999;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 0, 0, 1);
+            }
+
+            100% {
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="site-nav">
+        ym666 ∨ | 消息 ∨ | 手机逛淘宝 | 联系客服
+    </div>
+    <div class="top-header">
+        <h1>我的淘宝</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="搜索我的订单">
+            <button>搜索</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <dl>
+                <dt>全部功能</dt>
+                <dd class="active">已买到的宝贝</dd>
+                <dd>我的购物车</dd>
+                <dd>我的收藏</dd>
+                <dd>评价管理</dd>
+                <dd>退款维权</dd>
+            </dl>
+        </div>
+
+        <div class="main-content">
+            <ul class="filter-tab">
+                <li class="active">所有订单</li>
+                <li>待付款</li>
+                <li>待发货</li>
+                <li>待收货</li>
+                <li>待评价</li>
+                <li style="margin-left:auto; border:none; font-weight:normal; color:#666;">订单回收站</li>
+            </ul>
+
+            <div class="order-table-head">
+                <div class="col-item">宝贝</div>
+                <div class="col-price">单价</div>
+                <div class="col-num">数量</div>
+                <div class="col-op">操作</div>
+                <div class="col-amount">实付款</div>
+                <div class="col-status">交易状态</div>
+                <div class="col-trade">交易操作</div>
+            </div>
+            <div class="order-item">
+                <div class="order-info-header">
+                    <span>2025-04-20 &nbsp;&nbsp; 订单号: 84729102384</span>
+
+                    <span style="display:flex; align-items:center;">
+                        店铺: <a href="#" style="margin-left:5px;">灵石庇护所</a>
+                        <span class="shop-icon">店</span>
+
+                        <a href="#"
+                            onclick="window.open('taobao_chat.html', 'chat', 'width=800,height=600'); return false;"
+                            style="margin-left:15px; display:flex; align-items:center; text-decoration:none;">
+                            <span style="color:#00a2ff; font-size:16px;">💧</span>
+                            <span style="color:#00a2ff; margin-left:2px; font-size:12px;">和我联系</span>
+                        </a>
+                    </span>
+
+                    <span style="cursor:pointer;" onclick="alert('无法删除此订单')">🗑</span>
+                </div>
+                <div class="order-body">
+                    <div class="body-col body-item">
+                        <div class="goods-img">
+                            <div class="crystal-stone"></div>
+                        </div>
+                        <div class="goods-desc">
+                            <div class="goods-title"><a href="#">【店主推荐】黑曜石 / 净化磁场 / 抑制幻觉 / 绝对真实 / 不退不换</a></div>
+                            <div class="goods-props">
+                                颜色分类：<span style="font-weight:bold;">狂厄红</span><br>
+                                尺寸：握持款
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body-col body-price">¥ 198.00</div>
+                    <div class="body-col body-num">1</div>
+                    <div class="body-col body-op">
+                        <a href="#">申请售后</a>
+                    </div>
+                    <div class="body-col body-amount">
+                        <div class="price-bold">¥ 198.00</div>
+                        <div style="font-size:12px; color:#999;">(含运费: ¥0.00)</div>
+                    </div>
+                    <div class="body-col body-status">
+                        <div class="status-success">交易成功</div>
+                        <a href="#">订单详情</a>
+                        <a style="margin-top:5px; color:#4a90e2;"
+                            onclick="alert('物流详情：\n2025-04-21 02:00 快件已签收。\n签收人：门口保安\n备注：保安说监控里没看到快递员，箱子是凭空出现的。')">查看物流</a>
+                    </div>
+                    <div class="body-col body-trade">
+                        <button class="btn-primary">评价</button>
+                        <button class="btn-ghost">再次购买</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-item">
+                <div class="order-info-header">
+                    <span>2025-05-10 &nbsp;&nbsp; 订单号: 123847192</span>
+                    <span>店铺: <a href="#">天猫超市</a></span>
+                    <span style="cursor:pointer;">🗑</span>
+                </div>
+                <div class="order-body">
+                    <div class="body-col body-item">
+                        <div class="goods-img" style="background:#fff;">
+                            <span style="font-size:30px;">🧴</span>
+                        </div>
+                        <div class="goods-desc">
+                            <div class="goods-title"><a href="#">生姜防脱发洗发水 500ml 控油蓬松</a></div>
+                        </div>
+                    </div>
+                    <div class="body-col body-price">¥ 59.00</div>
+                    <div class="body-col body-num">2</div>
+                    <div class="body-col body-op"></div>
+                    <div class="body-col body-amount">
+                        <div class="price-bold">¥ 118.00</div>
+                    </div>
+                    <div class="body-col body-status">
+                        <div class="status-success">交易成功</div>
+                    </div>
+                    <div class="body-col body-trade">
+                        <button class="btn-ghost">再次购买</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

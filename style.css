@@ -1,0 +1,251 @@
+/* 1. 基础设置 */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+    font-family: "Microsoft YaHei", sans-serif;
+    user-select: none;
+}
+
+/* 2. 壁纸 (两个页面通用) */
+.wallpaper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 使用简单的深蓝渐变，保证不花哨 */
+    background: linear-gradient(to bottom, #1e3c72, #2a5298);
+    z-index: -1;
+}
+
+/* 3. 桌面图标 */
+.desktop-icons {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.icon {
+    width: 80px;
+    text-align: center;
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+
+.icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+}
+
+.icon-img {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    color: white;
+    font-size: 24px;
+}
+
+.wechat-icon {
+    background: #07c160;
+}
+
+.bin-icon {
+    font-size: 40px;
+}
+
+.icon-text {
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    font-size: 13px;
+}
+
+/* 4. 任务栏 */
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: #f3f3f3;
+    border-top: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.win-start {
+    font-size: 20px;
+    color: #0078d7;
+    margin-right: 15px;
+}
+
+.clock {
+    margin-left: auto;
+    font-size: 12px;
+    color: #333;
+}
+
+/* 5. 窗口标题栏 (微信页用到) */
+.title-bar {
+    height: 30px;
+    background: #e9e9e9;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+/* ...之前的代码... */
+
+.sticky-note {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 200px;
+    height: 200px;
+    background: #ffeb3b;
+    /* 经典的便签黄 */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    transform: rotate(2deg);
+    /* 稍微歪一点，更真实 */
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: #333;
+}
+
+.sticky-note h3 {
+    margin-top: 0;
+    border-bottom: 2px dashed #cea100;
+    padding-bottom: 5px;
+}
+
+.sticky-note ul {
+    padding-left: 20px;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px red;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 新增图标样式 */
+.ding-icon {
+    background: #0089FF;
+    color: white;
+    border-radius: 8px;
+}
+
+.oa-icon {
+    background: white;
+    color: #0089FF;
+    border: 2px solid #0089FF;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.pc-icon {
+    background: transparent;
+    font-size: 40px;
+}
+
+.browser-icon {
+    background: transparent;
+    font-size: 40px;
+}
+
+/* === 通用窗口样式 (所有页面通用) === */
+
+/* 1. 窗口外框 */
+#browser-window,
+#fake-window {
+    /* 统一位置和阴影 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 8px;
+    /* Windows 11 是圆角，Windows 10 是直角，这里用微圆角 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    /* 更深的阴影，更有立体感 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* 加上边框，更像软件 */
+    border: 1px solid #aaa;
+}
+
+/* 2. 顶部标题栏 */
+.browser-bar,
+.title-bar,
+.win-header {
+    height: 35px;
+    background: #f3f3f3;
+    /* 浅灰色背景 */
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-bottom: 1px solid #dcdcdc;
+    user-select: none;
+    /* 防止标题被选中 */
+}
+
+/* 3. 地址栏/输入框 (浏览器和OA用到) */
+.url-box {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* Windows 的输入框没那么圆 */
+    margin: 0 15px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: #333;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    /* 内部微阴影 */
+}
+
+/* 4. 关闭按钮 (统一成 Windows 样式) */
+/* 注意：你 HTML 里写的可能是 '✕' 或者 '×'，这里设置鼠标悬停效果 */
+.close-btn:hover,
+.browser-bar div[onclick*="index.html"]:hover {
+    color: white !important;
+    background-color: #e81123;
+    /* Windows 经典的红色关闭背景 */
+    border-radius: 4px;
+    padding: 0 5px;
+}

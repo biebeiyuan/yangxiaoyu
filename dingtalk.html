@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WorkTalk - 企业版</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 钉钉专属样式 (蓝色系) */
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #fake-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 600px;
+            background: #fff;
+            border-radius: 6px;
+            display: flex;
+            /* 关键：开启Flex布局 */
+            flex-direction: row;
+            /* 关键：横向排列 */
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        /* 1. 侧边栏 (固定宽度, 不许缩小) */
+        .sidebar {
+            width: 60px;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            flex-shrink: 0;
+            /* 禁止被挤压 */
+        }
+
+        .tab-icon {
+            color: #888;
+            font-size: 24px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .tab-icon.active {
+            color: #0089FF;
+        }
+
+        /* 2. 列表栏 (固定宽度, 不许缩小) */
+        .list-col {
+            width: 250px;
+            border-right: 1px solid #eee;
+            background: #fdfdfd;
+            flex-shrink: 0;
+            /* 禁止被挤压 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-bar {
+            padding: 10px;
+            background: #f5f5f5;
+            margin: 10px;
+            border-radius: 4px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .chat-item {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+        }
+
+        .chat-item:hover {
+            background: #f0f0f0;
+        }
+
+        .chat-item.active {
+            background: #e6f7ff;
+            border-right: 2px solid #0089FF;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #0089FF;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        /* 3. 主聊天区 (自动填满剩余空间) */
+        .main-area {
+            flex: 1;
+            /* 占据剩余宽度 */
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            min-width: 0;
+            /* 防止内容过宽撑开容器 */
+        }
+
+        .chat-header {
+            height: 50px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            color: #999;
+            font-size: 20px;
+        }
+
+        .close-btn:hover {
+            color: red;
+        }
+
+        .msg-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f5f5f5;
+        }
+
+        .msg {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .msg-info {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .bubble {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            display: inline-block;
+            max-width: 70%;
+            border: 1px solid #eee;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .bubble.boss {
+            border: 1px solid #ffcccc;
+            background: #fff0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wallpaper"></div>
+
+    <div id="fake-window">
+        <div class="sidebar">
+            <div class="tab-icon active">💬</div>
+            <div class="tab-icon">📅</div>
+            <div class="tab-icon">👥</div>
+        </div>
+
+        <div class="list-col">
+            <div class="search-bar">🔍 搜索</div>
+            <div class="chat-item active" onclick="loadChat('boss')">
+                <div class="avatar" style="background:#ff9c00">组</div>
+                <div>
+                    <div style="font-weight:bold; font-size:14px;">张组长（咖啡） (5)</div>
+                    <div style="font-size:12px; color:red;">[未读] 半小时内不补假条...</div>
+                </div>
+            </div>
+            <div class="chat-item" onclick="loadChat('colleague')">
+                <div class="avatar" style="background:#52c41a">蛋</div>
+                <div>
+                    <div style="font-weight:bold; font-size:14px;">蛋黄</div>
+                    <div style="font-size:12px; color:#999;">姐妹你人呢？</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-area">
+            <div class="chat-header">
+                <span id="chat-title">张组长（咖啡）</span>
+                <span class="close-btn" onclick="window.location.href='index.html'">×</span>
+            </div>
+            <div class="msg-area" id="msg-box">
+            </div>
+            <div style="height:150px; background:white; border-top:1px solid #eee; flex-shrink: 0;"></div>
+        </div>
+    </div>
+
+    <script>
+        const chats = {
+            'boss': [
+                { name: '张组长(咖啡)', time: '09:00', text: '@小y 还没到？周会要开始了。' },
+                { name: '张组长(咖啡)', time: '09:30', text: '电话不接？微信不回？' },
+                { name: '张组长(咖啡)', time: '10:15', text: '你要是病了就赶紧去OA上提流程！人事那边在查考勤了！' },
+                { name: '张组长(咖啡)', time: '10:16', text: '我看你OA上也是空的，你搞什么？' },
+                { name: '张组长(咖啡)', time: '10:17', text: '半小时内不补假条按旷工处理！', isBoss: true }
+            ],
+            'colleague': [
+                { name: '蛋黄', time: '10:20', text: '姐妹你人呢？咖啡姐发飙了。' },
+                { name: '蛋黄', time: '10:21', text: '今天周一例会总部来人了' },
+                { name: '蛋黄', time: '10:22', text: '赶紧去OA补一个病假单，先糊弄过去再说！' }
+            ]
+        };
+
+        function loadChat(key) {
+            const msgs = chats[key];
+            const box = document.getElementById('msg-box');
+            document.getElementById('chat-title').innerText = key === 'boss' ? '张组长(咖啡)' : '蛋黄';
+
+            box.innerHTML = '';
+            msgs.forEach(m => {
+                box.innerHTML += `
+                    <div class="msg">
+                        <div class="msg-info">${m.name} ${m.time}</div>
+                        <div class="bubble ${m.isBoss ? 'boss' : ''}">${m.text}</div>
+                    </div>
+                `;
+            });
+        }
+        loadChat('boss');
+    </script>
+</body>
+
+</html>

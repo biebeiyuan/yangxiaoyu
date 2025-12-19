@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>睡眠瘫痪症 - 百科全书</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #browser-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 700px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .browser-bar {
+            height: 30px;
+            background: #dfe3e6;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .url-box {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            margin: 0 10px;
+            padding: 2px 10px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* 百科内容样式 */
+        .wiki-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            font-family: sans-serif;
+            line-height: 1.8;
+        }
+
+        h1 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .summary {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .tag {
+            background: #e6f7ff;
+            color: #0089ff;
+            padding: 2px 5px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .related-link {
+            margin-top: 50px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-left: 5px solid #ccc;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wallpaper"></div>
+
+    <div id="browser-window">
+        <div class="browser-bar">
+            <div style="font-size:16px;">🌐</div>
+
+            <div class="url-box">...</div>
+
+            <div style="display:flex; gap:15px; color:#666;">
+                <span>─</span>
+                <span>□</span>
+                <span style="cursor:pointer; font-size:18px;" onclick="window.location.href='index.html'"
+                    class="close-btn">×</span>
+            </div>
+        </div>
+
+        <div class="wiki-content">
+            <h1>睡眠瘫痪症 <span style="font-size:14px; color:#999; font-weight:normal;">(医学术语)</span></h1>
+            <div style="margin-bottom:10px;">
+                <span class="tag">睡眠障碍</span> <span class="tag">鬼压床</span> <span class="tag">幻觉</span>
+            </div>
+
+            <div class="summary">
+                <b>睡眠瘫痪症</b>（Sleep
+                Paralysis），俗称“鬼压床”。是指在入睡或苏醒时，大脑已清醒但肢体肌肉仍处于麻痹状态，无法动弹的现象。患者常伴有恐慌感、呼吸困难，甚至产生<b>幻视（看见黑影）、幻听</b>。
+            </div>
+
+            <h3>病因分析</h3>
+            <p>现代医学认为，过度疲劳、压力大、作息不规律是主要诱因。并无超自然力量介入。</p>
+
+            <h3>常见症状</h3>
+            <ul>
+                <li>意识清醒但无法说话或移动。</li>
+                <li>感觉胸口受压（窒息感）。</li>
+                <li>视听幻觉：如看见床边有人影、听见电流声或低语。</li>
+            </ul>
+
+            <div class="related-link">
+                <h4>相关讨论</h4>
+                <ul>
+                    <li><a href="#">科学辟谣：世上没有鬼，别自己吓自己</a></li>
+                    <li><a href="#">神经内科专家座谈会视频回顾</a></li>
+                    <li><a href="forum.html" style="font-weight:bold;">[求助] 最近鬼压床太频繁了，看见的黑影好像还会变大？(99+回复)</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

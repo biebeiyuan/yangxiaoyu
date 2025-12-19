@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OA 协同办公系统</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* OA 专属样式：干净的企业蓝 */
+        #browser-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 700px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .browser-bar {
+            height: 30px;
+            background: #dfe3e6;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .url-box {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin: 0 10px;
+            padding: 2px 5px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .oa-content {
+            flex: 1;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 登录框样式 */
+        .login-box {
+            width: 350px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-title {
+            color: #0089FF;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #0089FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #0077dd;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        /* 登录后的主页样式 (默认隐藏) */
+        #oa-dashboard {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+        }
+
+        .oa-header {
+            height: 50px;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        .oa-body {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .paper {
+            width: 700px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wallpaper"></div>
+
+    <div id="browser-window">
+        <div class="browser-bar">
+            <div style="font-size:16px;">🌐</div>
+
+            <div class="url-box">...</div>
+
+            <div style="display:flex; gap:15px; color:#666;">
+                <span>─</span>
+                <span>□</span>
+                <span style="cursor:pointer; font-size:18px;" onclick="window.location.href='index.html'"
+                    class="close-btn">×</span>
+            </div>
+        </div>
+
+        <div class="oa-content">
+            <div id="login-view" class="login-box">
+                <div class="login-title">企业统一身份认证</div>
+                <div class="input-group">
+                    <label>账号</label>
+                    <input type="text" value="User_Y (杨小鱼)" disabled style="background:#f5f5f5;">
+                </div>
+                <div class="input-group">
+                    <label>密码</label>
+                    <input type="password" id="pwd-input" placeholder="请输入密码">
+                </div>
+                <button class="btn" onclick="login()">登 录</button>
+                <div class="hint">
+                    ⚠ 初始密码已过期。<br>
+                    新密码规则：<b>入职日期(8位) + 名字首字母(大写)</b><br>
+                    示例：20230101A
+                </div>
+                <div id="err-msg" style="color:red; font-size:12px; margin-top:10px; display:none;">密码错误</div>
+            </div>
+
+            <div id="oa-dashboard">
+                <div class="oa-header">
+                    <span style="font-weight:bold; color:#0089FF;">OA System</span>
+                    <span>杨小鱼 | 退出</span>
+                </div>
+                <div class="oa-body">
+                    <div class="paper">
+                        <h2 style="text-align:center; margin-bottom:30px;">请假申请单 (草稿)</h2>
+                        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                            <tr>
+                                <td style="padding:10px; border-bottom:1px solid #eee; width:80px;"><b>申请人</b></td>
+                                <td style="padding:10px; border-bottom:1px solid #eee;">杨小鱼</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px; border-bottom:1px solid #eee;"><b>部门</b></td>
+                                <td style="padding:10px; border-bottom:1px solid #eee;">市场部</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px; border-bottom:1px solid #eee;"><b>事由</b></td>
+                                <td style="padding:10px; border-bottom:1px solid #eee; line-height:1.6; color:#333;">
+                                    张组长，身体实在不舒服，发烧了，头很晕。<br>
+                                    刚去湘南附一看了医生，说是病毒感冒，医生建议休息一天。<br><br>
+                                    <span
+                                        style="background:#f0f0f0; padding:5px; border-radius:4px; font-size:12px; cursor:not-allowed;">
+                                        📎 附件：[湘南附一_门诊病历.jpg] (上传失败)
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="margin-top:30px; text-align:center;">
+                            <button class="btn" style="width:100px; background:#ccc; cursor:not-allowed;">发送</button>
+                            <button class="btn" style="width:100px;" onclick="alert('已保存到线索库！');">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            const pwd = document.getElementById('pwd-input').value;
+            // 这里的密码需要玩家去 computer.html 里找
+            if (pwd === '20240712Y') {
+                document.getElementById('login-view').style.display = 'none';
+                document.getElementById('oa-dashboard').style.display = 'flex';
+            } else {
+                document.getElementById('err-msg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

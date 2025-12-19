@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WeChat</title>
+    <style>
+        /* === 基础样式 === */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 60px;
+            background: #2e2e2e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            color: #fff;
+        }
+
+        .my-avatar {
+            width: 36px;
+            height: 36px;
+            background: #ddd;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 列表栏 */
+        .list-col {
+            width: 250px;
+            background: #e6e5e5;
+            border-right: 1px solid #d6d6d6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-box {
+            height: 50px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #e7e7e7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-input {
+            width: 80%;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #07c160;
+            background: #fff;
+        }
+
+        .chat-item {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .chat-item:hover {
+            background: #dcdcdc;
+        }
+
+        .chat-item.active {
+            background: #c5c5c6;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .name {
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #000;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .msg-preview {
+            font-size: 12px;
+            color: #999;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 头像颜色 */
+        .av-work {
+            background: #4a90e2;
+        }
+
+        .av-girl {
+            background: #ff6b6b;
+        }
+
+        .av-mbcc {
+            background: #d9534f;
+        }
+
+        /* 右侧聊天主区域 */
+        .main-chat {
+            flex: 1;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-title {
+            height: 50px;
+            border-bottom: 1px solid #e7e7e7;
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* === 消息气泡布局核心修改 === */
+        .msg-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .msg-row.self {
+            flex-direction: row-reverse;
+        }
+
+        .msg-avatar {
+            width: 35px;
+            height: 35px;
+            background: #ccc;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        /* 新增：消息内容的容器，用来包裹“名字”和“气泡” */
+        .msg-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 70%;
+        }
+
+        .msg-row.self .msg-content-wrapper {
+            align-items: flex-end;
+        }
+
+        /* 自己的消息靠右对齐 */
+
+        /* 新增：名字样式 */
+        .msg-name-text {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 2px;
+            margin-left: 2px;
+        }
+
+        .msg-row.self .msg-name-text {
+            display: none;
+        }
+
+        /* 自己的名字不显示，像微信一样 */
+
+        .bubble {
+            padding: 9px 13px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #ededed;
+            background: #fff;
+            word-wrap: break-word;
+        }
+
+        .msg-row.self .bubble {
+            background: #95ec69;
+            border: 1px solid #85d660;
+        }
+
+        /* 输入框 */
+        .input-area {
+            height: 150px;
+            border-top: 1px solid #e7e7e7;
+            background: #fff;
+            padding: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="my-avatar">Y</div>
+    </div>
+
+    <div class="list-col">
+        <div class="search-box">
+            <input type="text" class="search-input" id="wx-search" placeholder="搜索" onkeypress="handleSearch(event)">
+        </div>
+        <div id="chat-list-container"></div>
+    </div>
+
+    <div class="main-chat">
+        <div class="chat-title" id="chat-title">微信</div>
+        <div class="messages" id="message-box"></div>
+        <div class="input-area">
+            <div style="color:#999; margin-bottom:5px;">☺ ✂ 📁</div>
+            <textarea disabled placeholder=""></textarea>
+        </div>
+    </div>
+
+    <script>
+        // 搜索功能 (最终整合版)
+        function handleSearch(e) {
+            // 监听回车键
+            if (e.key === 'Enter'
+            ) {
+                const val = document.getElementById('wx-search'
+                ).value.trim();
+
+                // 1. 【新增】彩蛋逻辑：搜订单号 -> 触发神秘QQ邮箱
+                // 必须完全匹配订单号才触发，增加隐秘感
+                if (val === '84729102384'
+                ) {
+                    // 弹出之前写好的QQ邮箱界面
+                    window.open('qq_mail.html', 'mail_popup', 'width=900,height=700'
+                    );
+                }
+
+                // 2. 逻辑 A：搜医院 -> 跳转医院挂号页
+                else if (val.includes('湘南附一') || val.includes('医院'
+                )) {
+                    window.open('hospital.html', '_blank', 'width=400,height=700'
+                    );
+                }
+
+                // 3. 逻辑 B：搜公司/入职/培训 -> 跳转公众号推文
+                else if (val.includes('培训') || val.includes('初心计划') || val.includes('初心'
+                )) {
+                    // 打开推文页面
+                    window.open('article.html', '_blank', 'width=1000,height=700'
+                    );
+                }
+
+                // 4. 没搜到
+                else {
+                    // 这里可以根据需要改成 alert，或者只是在控制台打印
+                    // 为了游戏体验，如果不匹配，也可以提示一句暧昧的话
+                    alert(
+                        '未找到相关结果。\n'
+                    );
+                }
+            }
+        }
+
+        // 2. 数据
+        const chats = {
+            'work': {
+                name: '张总（咖啡）', avatarClass: 'av-work', preview: '老板: 记得补OA流程',
+                msgs: [
+                    { self: false, name: '张总（咖啡）', text: '@小y 你今天怎么没来？也没请假？' },
+                    { self: false, name: '张总（咖啡）', text: '半小时内去OA补流程，不然算旷工。' },
+                ]
+            },
+            'bestie': {
+                name: '林林', avatarClass: 'av-girl', preview: '算了等你来了再说吧',
+                msgs: [
+                    { self: false, name: '林林', text: '最近有好点没，我来湘南找你？' },
+                    { self: true, name: '小y', text: '不好呜呜呜我好想你，我最近特别特别惨来的状态特别差啊' },
+                    { self: false, name: '林林', text: '我就说你别老熬夜了吧！！有什么比身体更重要的！' },
+                    { self: true, name: '小y', text: '我也想啊T T,算了等你来了再说吧' }
+                ]
+            },
+            'project_wang': {
+                name: '项目部-(巨浪)王经理',
+                // 注意：如果你的CSS里没有专门给emoji做头像的逻辑，
+                // 建议暂时用现有的 'av-work' 类名，或者你自己去CSS里加一个
+                avatarClass: 'av-work',
+                // 这一行是显示在左侧列表的缩略语
+                preview: '对了，别算加班啊，这是为了你个人的成长。',
+                // 核心：必须叫 msgs，且内部结构必须是 self/name/text
+                msgs: [
+                    { self: false, name: '项目部-(巨浪)王经理', text: '小鱼，在吗？' },
+                    { self: false, name: '项目部-(巨浪)王经理', text: '[语音] 60" ' },
+                    { self: false, name: '项目部-(巨浪)王经理', text: '刚才那个语音听了吗？那个“云顶壹号”的海报，我们要那种 五彩斑斓的黑，懂我意思吧？' },
+                    { self: false, name: '项目部-(巨浪)王经理', text: '还有，把上面的英文 "Cyberpunk" 改大一点，虽然我们不懂，但加上去显洋气。' },
+                    { self: true, name: '小y', text: '王总，那个黑色如果五彩斑斓的话...打印出来会糊的。' },
+                    { self: false, name: '项目部-(巨浪)王经理', text: '你是专业的还是我是专业的？抓紧改，明天一早指挥部要看。' },
+                    { self: false, name: '项目部-(巨浪)王经理', text: '对了，别算加班啊，这是为了你个人的成长。' }
+                ]
+            },
+            'sms': {
+                name: '验证码助手', avatarClass: 'av-work', preview: '[新消息] 您的淘宝验证码是...',
+                msgs: [
+                    { self: false, name: '系统', text: '【淘宝网】您正在尝试登录淘宝网页版。' },
+                    { self: false, name: '系统', text: '您的验证码是：8821' },
+                    { self: false, name: '系统', text: '请在5分钟内输入，切勿告诉他人。' }
+                ]
+            },
+            'mbcc': {
+                name: '面包车车群',
+                avatarClass: 'av-mbcc',
+                preview: '我们厨子是这样的（安详）',
+                msgs: [
+                    { self: false, name: '辛迪加文明大使', text: '大家看前瞻没有，四星皮是卓娅，终于等到了😭😭' },
+                    { self: false, name: '边打57边触电', text: '新主线也抬上来了，柳生乘乘的，赐名鸭宝！' },
+                    { self: false, name: '糯米丝儿', text: '狼耳😋狼耳😋狼耳😋' },
+                    { self: false, name: '内海大章鱼', text: '我们源津这个皮是神....废案也好喜欢.....妈妈我想被你吃掉' },
+                    { self: false, name: '00', text: '诶说到吃！✨卡门奈特🥰葡萄🍇美食🥂口腹之欲🔥💋坏女人🥀🌹我真的太喜欢你了~❤️💓喜欢到😍恨不得一口把你吞下😋🌟有钱🎁高贵🎼明艳动人😮😲明智深谋🤓小小局长哪里跑🏃‍♂️👌腰间的齿痕就如同妈妈的嘴巴👄👅在满足自己欲望的同时㊗️也把自己吞下了💝💖红发轻摇 ‍🔥❤️真是让人欲罢不能呢😋✨💘' },
+                    { self: false, name: 'aaa电台主持人', text: ' MBCC最知名👍🏻的【电台主持人】🤍雷温🖤，【幽夜私语】凌晨三点的来电📞，嗓音磁性动听🤍，像蛊🖤，像椿药💊，是灵魂的共鸣☁️，5732第一女鬼御姐🤍，温柔☁️知性🌪，天生丽质🤍，美貌只是她🎧不值一提的一部分🤍，金色瞳孔✨如星辰般，璀璨熠熠💫，动人心魂📞🤍，巨蟹座♋️温柔和关怀☁️如诗如画🖤，天籁之声❗️心灵共鸣❗️🤍' },
+                    { self: false, name: '平山海', text: '东洲第一祭礼🤍杜若💚，最沉着冷静的智者📗，温柔似水💧刮骨柔情🥴，女人中的女人💚顶级魅魔🤍妈咪中的妈咪🤍❗️眯眯眼🕊白长直☁️，眉心一点刮骨刀🥰爱上杜若🍵是天意❗️是缘分❗️是人之常情❗️杜若的存在就是【神迹】🤍❕管他山海平不平🌪，杜若妈咪带我回东洲吧🌿🤍杜若妈咪带我回东洲吧🌿🤍杜若妈咪带我回东洲吧🌿🤍杜若妈咪带我回东洲吧🌿🤍杜若妈咪带我回东洲吧🌿🤍杜若妈咪带我回东洲吧🌿🤍杜若妈咪带我回东洲吧🌿🤍' },
+                    { self: true, name: '小y', text: '🌭🤡🥖我们都爱哈梅尔🌭🤡🥖为我们跳舞吧哈梅尔🌭🤡🥖🌭🤡🥖哈梅尔！！！哈梅尔！🌭🤡🥖我们都爱哈梅尔🌭🤡🥖为我们跳舞吧哈梅尔🌭🤡🥖🌭🤡🥖哈梅尔！！！哈梅尔！🌭🤡🥖我们都爱哈梅尔🌭🤡🥖为我们跳舞吧哈梅尔🌭🤡🥖🌭🤡🥖哈梅尔！！！哈梅尔！🌭🤡🥖我们都爱哈梅尔🌭🤡🥖为我们跳舞吧哈梅尔🌭🤡🥖欢迎来到嘉年华 欢迎来到嘉年华🌭🤡🥖又有笨蛋走错啦🤡又有笨蛋走错啦🤡哈梅尔！哈梅尔！为我们跳舞吧，哈梅尔！哈梅尔！🌭🤡🥖哈梅尔！🌭🤡🥖我们都爱哈梅尔！ 🌭🤡🥖哈梅尔为我们跳舞吧，替我们诉说吧！！哈梅尔🌭🤡🥖' },
+                    { self: false, name: '可乐猫', text: '...工会战更新了uu们记得打@全体成员' },
+                    { self: false, name: '加强燃烧队', text: '甜心刀暖盟首一整天❤️' },
+                    { self: true, name: '小y', text: '甜心刀暖盟首一整天❤️' },
+                    { self: true, name: '小y', text: '哦呵呵最近天天加班没心情打57有无好心人帮我打三刀' },
+                    { self: false, name: '可乐猫', text: '@小y:账密还是之前那个？' },
+                    { self: false, name: '我爱那个蛇瞳女孩', text: '小y你密码再不改真要人尽皆知了' },
+                    { self: true, name: '小y', text: '我们厨子是这样的（安详）' }
+                ]
+            }
+        };
+
+        // 3. 生成列表
+        const listContainer = document.getElementById('chat-list-container');
+        listContainer.innerHTML = '';
+        for (let key in chats) {
+            const chat = chats[key];
+            listContainer.innerHTML += `
+                <div class="chat-item" onclick="loadChat('${key}', this)">
+                    <div class="avatar ${chat.avatarClass}">${chat.name[0]}</div>
+                    <div class="info">
+                        <div class="name">${chat.name}</div>
+                        <div class="msg-preview">${chat.preview}</div>
+                    </div>
+                </div>`;
+        }
+
+        // 4. 加载聊天内容 (修改了这里！)
+        function loadChat(key, element) {
+            document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            const chat = chats[key];
+            document.getElementById('chat-title').innerText = chat.name;
+
+            const msgBox = document.getElementById('message-box');
+            msgBox.innerHTML = '';
+
+            chat.msgs.forEach(m => {
+                // 根据是否是自己，决定头像颜色
+                const color = m.self ? '#ddd' : '#aaa';
+                // 只有别人的消息，才显示名字 DIV
+                const nameHTML = m.self ? '' : `<div class="msg-name-text">${m.name}</div>`;
+
+                msgBox.innerHTML += `
+                    <div class="msg-row ${m.self ? 'self' : 'other'}">
+                        <div class="msg-avatar" style="background:${m.self ? '#ddd' : '#aaa'}">${m.self ? 'Y' : m.name[0]}</div>
+                        
+                        <div class="msg-content-wrapper">
+                            ${nameHTML}
+                            <div class="bubble">${m.text}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 自动滚动到底部
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+
+        // 初始化
+        const firstItem = document.querySelector('.chat-item');
+        if (firstItem) loadChat('work', firstItem);
+    </script>
+</body>
+
+</html>

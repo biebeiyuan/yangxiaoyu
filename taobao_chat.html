@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>灵石庇护所 - 阿里旺旺</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            font-family: "Microsoft YaHei", sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 聊天窗口容器 */
+        .chat-window {
+            width: 800px;
+            height: 600px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #dcdcdc;
+        }
+
+        /* 顶部标题栏 */
+        .header {
+            height: 60px;
+            background: linear-gradient(90deg, #0099ff 0%, #66ccff 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+        }
+
+        .shop-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #0099ff;
+            font-weight: bold;
+        }
+
+        .shop-info h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .shop-info span {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* 聊天记录区域 */
+        .chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f0f5fb;
+        }
+
+        /* 消息气泡 */
+        .msg-row {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .msg-row.self {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #ddd;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .msg-row.other .avatar {
+            margin-right: 10px;
+            background: #333;
+            color: #fff;
+        }
+
+        /* 店主是黑色的 */
+        .msg-row.self .avatar {
+            margin-left: 10px;
+            background: #ff9900;
+            color: #fff;
+        }
+
+        /* 小y是橙色的 */
+
+        .bubble-wrapper {
+            max-width: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .msg-row.self .time {
+            text-align: right;
+        }
+
+        .bubble {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .msg-row.other .bubble {
+            background: #fff;
+            border-top-left-radius: 0;
+            color: #333;
+        }
+
+        .msg-row.self .bubble {
+            background: #9eea6a;
+            border-top-right-radius: 0;
+            color: #333;
+        }
+
+        /* 底部输入框（只读） */
+        .input-area {
+            height: 120px;
+            border-top: 1px solid #ddd;
+            background: #fff;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            height: 30px;
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 18px;
+            cursor: not-allowed;
+        }
+
+        .input-box {
+            flex: 1;
+            border: none;
+            outline: none;
+            resize: none;
+            color: #999;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .send-btn {
+            align-self: flex-end;
+            width: 80px;
+            height: 30px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            color: #ccc;
+            border-radius: 2px;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-window">
+        <div class="header">
+            <div class="shop-avatar">💎</div>
+            <div class="shop-info">
+                <h3>灵石庇护所 <span
+                        style="font-size:12px; border:1px solid #fff; padding:0 4px; border-radius:2px;">金牌卖家</span>
+                </h3>
+                <span>虽然话少，但保真。</span>
+            </div>
+            <div style="margin-left:auto; cursor:pointer;" onclick="window.close()">✖</div>
+        </div>
+
+        <div class="chat-history">
+            <div style="text-align:center; color:#ccc; font-size:12px; margin: 20px 0;">2025年4月15日 10:23</div>
+
+            <div class="msg-row self">
+                <div class="avatar">🐟</div>
+                <div class="bubble-wrapper">
+                    <div class="time">ym666</div>
+                    <div class="bubble">老板，已拍下。听说这个对失眠和睡眠障碍有用？是真的吗？</div>
+                </div>
+            </div>
+
+            <div class="msg-row other">
+                <div class="avatar">0</div>
+                <div class="bubble-wrapper">
+                    <div class="time">灵石庇护所</div>
+                    <div class="bubble">亲，不承诺医疗功效哦。但这块原石磁场比较特殊，很多人反馈确实能让人心静。</div>
+                </div>
+            </div>
+
+            <div class="msg-row self">
+                <div class="avatar">🐟</div>
+                <div class="bubble-wrapper">
+                    <div class="time">ym666</div>
+                    <div class="bubble">好的，只要能让我睡个安稳觉就行。收到后直接放床头吗？</div>
+                </div>
+            </div>
+
+            <div class="msg-row other">
+                <div class="avatar">0</div>
+                <div class="bubble-wrapper">
+                    <div class="time">灵石庇护所</div>
+                    <div class="bubble">
+                        不可以乱放。<br>
+                        这款矿石活性比较大（脾气不太好），收到后请务必严格执行以下<b>【净化三部曲】</b>：<br><br>
+                        1. <b>初次镇压（划掉）...初次清洁</b>：<br>
+                        不要用自来水冲洗。请准备一包<b>粗海盐</b>，将石头完全掩埋2小时。盐能吸收掉它运输途中沾染的躁动能量。<br><br>
+                        2. <b>充能方式</b>：<br>
+                        <b>绝对禁止暴晒！</b>它讨厌太阳，也讨厌强烈的人造光。请在晚上把它放在窗台上，让它晒<b>月光</b>。月光越亮，它的成色会越红，效果越好。<br><br>
+                        3. <b>摆放阵位</b>：<br>
+                        睡觉时，请放在枕边左侧45度角。如果您感觉耳鸣，可以适当调远一点，那是它在和您的脑波同频。
+                    </div>
+                </div>
+            </div>
+
+            <div class="msg-row self">
+                <div class="avatar">🐟</div>
+                <div class="bubble-wrapper">
+                    <div class="time">ym666</div>
+                    <div class="bubble">虽然听起来有点玄乎...但我记住了。海盐、月光、枕边左侧。</div>
+                </div>
+            </div>
+
+            <div class="msg-row other">
+                <div class="avatar">0</div>
+                <div class="bubble-wrapper">
+                    <div class="time">灵石庇护所</div>
+                    <div class="bubble">
+                        还有最重要的一点：<br>
+                        <b>不要让别人碰它。</b><br>
+                        它是为您挑选的，只认您的频率。如果被其他人（尤其是有恶意的人）触碰，石头可能会变得浑浊（发蓝）。<br>
+                        后续还有什么问题，请<b>邮箱</b>联系我<br>
+                        祝您好梦。
+                    </div>
+                </div>
+            </div>
+
+            <div class="msg-row self">
+                <div class="avatar">🐟</div>
+                <div class="bubble-wrapper">
+                    <div class="time">ym666</div>
+                    <div class="bubble">好的，你邮箱是？
+                    </div>
+                </div>
+            </div>
+            <div class="msg-row self">
+                <div class="avatar">🐟</div>
+                <div class="bubble-wrapper">
+                    <div class="time">ym666</div>
+                    <div class="bubble">咦，店主你还在吗？
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center; color:#ccc; font-size:12px; margin: 30px 0;">以上是历史消息</div>
+
+        </div>
+
+        <div class="input-area">
+            <div class="toolbar">
+                <span>😊</span> <span>📁</span> <span>✂️</span>
+            </div>
+            <textarea class="input-box" disabled>对方不在线或您已离线，无法发送消息。</textarea>
+            <button class="send-btn">发送</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

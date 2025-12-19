@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>湘南附一医院</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 小程序容器：模仿手机屏幕比例 */
+        #mini-program {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 375px;
+            height: 667px;
+            background: #f2f2f2;
+            border-radius: 20px;
+            border: 8px solid #333;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 顶部导航栏 */
+        .nav-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-back {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 医院头部 */
+        .hospital-header {
+            background: #4a90e2;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .h-logo {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            color: #4a90e2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        /* 功能宫格 */
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .grid-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .grid-item:hover {
+            transform: scale(0.98);
+            background: #f9f9f9;
+        }
+
+        .g-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .g-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* 病例列表页 (默认隐藏) */
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            display: none;
+            background: #f2f2f2;
+        }
+
+        .page-active {
+            display: block;
+        }
+
+        .record-card {
+            background: #fff;
+            margin: 10px 15px;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .r-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .r-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .r-dept {
+            font-size: 12px;
+            color: #666;
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* 详情弹窗 */
+        .modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            width: 85%;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .report-title {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .report-row {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .report-label {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wallpaper"></div>
+
+    <div id="mini-program">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="window.location.href='wechat.html'">&lt; 返回</div>
+            <div style="font-weight:bold;">湘南附一医院</div>
+            <div>•••</div>
+        </div>
+
+        <div id="page-home" class="page-content page-active">
+            <div class="hospital-header">
+                <div class="h-logo">十</div>
+                <div>
+                    <div style="font-size:18px; font-weight:bold;">湘南大学附一医院</div>
+                    <div style="font-size:12px; opacity:0.8;">三级甲等 | 综合医院</div>
+                </div>
+            </div>
+
+            <div class="grid-menu">
+                <div class="grid-item">
+                    <div class="g-icon">📅</div>
+                    <div class="g-text">当日挂号</div>
+                </div>
+                <div class="grid-item">
+                    <div class="g-icon">📝</div>
+                    <div class="g-text">就诊签到</div>
+                </div>
+                <div class="grid-item" onclick="showRecords()">
+                    <div class="g-icon">📂</div>
+                    <div class="g-text">门诊病例</div>
+                </div>
+                <div class="grid-item">
+                    <div class="g-icon">💳</div>
+                    <div class="g-text">门诊缴费</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-records" class="page-content">
+            <div style="padding:15px; color:#666; font-size:12px;">就诊人：杨铭 (User_Y)</div>
+
+            <div class="record-card" onclick="showDetail('fever')">
+                <div class="r-date">2025-05-20 09:30</div>
+                <div class="r-title">普通门诊 - 发热待查</div>
+                <div class="r-dept">呼吸内科</div>
+            </div>
+
+            <div class="record-card" onclick="showDetail('psy')">
+                <div class="r-date">2025-04-13 14:20</div>
+                <div class="r-title">专家门诊 - 睡眠障碍</div>
+                <div class="r-dept" style="background:#ffebee; color:#c62828;">精神心理科</div>
+            </div>
+        </div>
+
+        <div id="report-modal" class="modal" onclick="this.style.display='none'">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h3 class="report-title">门诊病历单</h3>
+                <div id="report-text"></div>
+                <br>
+                <button onclick="document.getElementById('report-modal').style.display='none'"
+                    style="width:100%; padding:10px; background:#4a90e2; color:white; border:none; border-radius:4px;">关闭</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showRecords() {
+            document.getElementById('page-home').classList.remove('page-active');
+            document.getElementById('page-records').classList.add('page-active');
+        }
+
+        function showDetail(type) {
+            const modal = document.getElementById('report-modal');
+            const content = document.getElementById('report-text');
+
+            if (type === 'fever') {
+                content.innerHTML = `
+                    <div class="report-row"><span class="report-label">科室：</span>呼吸内科</div>
+                    <div class="report-row"><span class="report-label">主诉：</span>头晕、低烧、乏力两天。</div>
+                    <div class="report-row"><span class="report-label">现病史：</span>患者自述浑身酸痛，体温37.8℃。</div>
+                    <div class="report-row"><span class="report-label">诊断：</span>上呼吸道感染。</div>
+                    <div class="report-row"><span class="report-label">处方：</span>布洛芬缓释胶囊，多喝水，建议休息。</div>
+                `;
+            } else if (type === 'psy') {
+                // 这里的重点剧情！！
+                content.innerHTML = `
+                    <div class="report-row"><span class="report-label">科室：</span>精神心理科</div>
+                    <div class="report-row"><span class="report-label">主诉：</span>入睡困难，多梦，伴有“睡眠瘫痪”（鬼压床）。</div>
+                    <div class="report-row"><span class="report-label">现病史：</span>患者自述夜间频繁看见床边有模糊黑影，且感觉四肢无法动弹，甚至产生幻觉。</div>
+                    <div class="report-row"><span class="report-label">检查：</span>脑电图未见异常，精神状态检查(MSE)意识清。</div>
+                    <div class="report-row"><span class="report-label">诊断：</span><span style="color:red">焦虑状态，神经衰弱。</span></div>
+                    <div class="report-row"><span class="report-label">医嘱：</span>近期工作压力较大，建议调整作息，避免过度劳累。开具安神补脑液。</div>
+                `;
+            }
+            modal.style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>
