@@ -294,6 +294,12 @@
                     window.open('hospital.html', '_blank', 'width=400,height=700'
                     );
                 }
+                else if (val.includes('好黑好紫') || val.includes('虫子一样蠕动') || val.includes('虫子') || val.includes('蠕动'
+                )) {
+                    alert(
+                        '你没有查看权限，请打开上锁文件夹查看相关内容'
+                    );
+                }
 
                 // 3. 逻辑 B：搜公司/入职/培训 -> 跳转公众号推文
                 else if (val.includes('培训') || val.includes('初心计划') || val.includes('初心'
