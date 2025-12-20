@@ -3,12 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>系统接入中...</title>
+    <title>MBCC OS - 系统接入</title>
     <style>
+        /* 全局重置 */
         body {
-            background-color: #000;
-            color: #ddd;
-            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #050505;
+            /* 极深的黑色 */
+            /* 背景添加淡淡的网格线，模拟屏幕 */
+            background-image:
+                linear-gradient(#1a1a1a 1px, transparent 1px),
+                linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #b0b0b0;
+            /* 默认文字是灰白色 */
+            font-family: "Consolas", "Courier New", monospace;
+            /* 终端字体 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,143 +27,226 @@
             user-select: none;
         }
 
-        .container {
-            width: 700px;
-            padding: 40px;
+        /* 主容器：模仿游戏里的弹窗框 */
+        .terminal-box {
+            width: 750px;
+            padding: 2px;
+            /* 给边框留点位置 */
+            background: #000;
             border: 1px solid #333;
-            border-radius: 10px;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            box-shadow: 0 0 30px rgba(0, 162, 255, 0.1);
+            /* 外框 */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
             position: relative;
         }
 
-        /* 顶部装饰条 */
-        .decoration-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #000, #ff4d4d, #00a2ff, #000);
+        /* 顶部红色装饰条 */
+        .top-bar {
+            background: #111;
+            border-bottom: 1px solid #ff4d4d;
+            /* 红色底边 */
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ff4d4d;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
+        .user-status {
+            color: #fff;
+            font-size: 12px;
+        }
+
+        /* 内容区域 */
+        .content-area {
+            padding: 40px;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        /* 标题样式 */
         h1 {
             color: #fff;
-            font-size: 24px;
-            margin-bottom: 30px;
-            text-align: center;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+            margin: 0 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #333;
+            text-transform: uppercase;
         }
 
+        /* 剧情文本 */
         .story-text {
-            font-size: 16px;
-            line-height: 2;
-            text-align: justify;
+            font-size: 15px;
+            line-height: 1.8;
             margin-bottom: 30px;
-            opacity: 0;
-            /* 初始隐藏，用于淡入动画 */
-            animation: fadeIn 2s forwards 0.5s;
+            text-align: justify;
         }
 
+        /* 逐行显示的动画 */
+        .story-text p {
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: textGlitch 0.5s forwards;
+        }
+
+        .story-text p:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .story-text p:nth-child(2) {
+            animation-delay: 1.0s;
+        }
+
+        .story-text p:nth-child(3) {
+            animation-delay: 2.5s;
+        }
+
+        .story-text p:nth-child(4) {
+            animation-delay: 4.0s;
+        }
+
+        /* 重点高亮 - 红色 */
         .highlight-red {
             color: #ff4d4d;
+            text-shadow: 0 0 5px rgba(255, 77, 77, 0.4);
             font-weight: bold;
         }
 
-        .highlight-blue {
-            color: #00a2ff;
-            font-weight: bold;
+        /* 重点高亮 - 蓝色/白色 */
+        .highlight-white {
+            color: #fff;
+            border-bottom: 1px solid #555;
         }
 
+        /* 玩法指南框 - 模仿任务简报 */
         .guide-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-left: 4px solid #00a2ff;
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 40px;
+            border: 1px solid #333;
+            background: #0d0d0d;
+            padding: 15px;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 30px;
+            position: relative;
             opacity: 0;
-            animation: fadeIn 2s forwards 1.5s;
+            animation: fadeIn 1s forwards 5.5s;
+            /* 最后出现 */
         }
 
+        /* 装饰性的左侧红条 */
+        .guide-box::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ff4d4d;
+        }
+
+        /* 按钮样式 - 硬核方块 */
         .btn-start {
             display: block;
-            width: 200px;
-            margin: 0 auto;
+            width: 100%;
             padding: 15px 0;
-            background: transparent;
+            background: #000;
             border: 1px solid #ff4d4d;
             color: #ff4d4d;
-            font-size: 18px;
+            font-family: "Consolas", monospace;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            letter-spacing: 5px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             opacity: 0;
-            animation: fadeIn 2s forwards 2.5s;
+            animation: fadeIn 1s forwards 6.0s;
         }
 
         .btn-start:hover {
             background: #ff4d4d;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(255, 77, 77, 0.6);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
         }
 
-        /* 淡入动画 */
-        @keyframes fadeIn {
-            from {
+        /* 动画定义 */
+        @keyframes textGlitch {
+            0% {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateX(-5px);
             }
 
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
+        }
+
+        /* 装饰性的扫描线 */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 99;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="decoration-line"></div>
+    <div class="scanline"></div>
 
-        <h1>MBCC 档案库接入请求</h1>
-
-        <div class="story-text">
-            <p>感谢体验本游戏！你将扮演的是游戏无期迷途 <strong>MBCC的局长</strong>。</p>
-            <p>一个陌生女孩突然出现将你带到了这个奇怪的空间，一阵强烈的眩晕过后，你发现自己竟<span class="highlight-red">【被困在电脑里】</span>。</p>
-            <p>那个女孩的声音在虚空中回荡：“我们的局长大人最擅长探案了不是吗？好好找吧，你会接触到<span class="highlight-red">【世界的真相】</span>。”</p>
-            <p>当你回过神来，女孩已不知所踪。你强迫自己冷静下来，看着眼前这台陌生的电脑屏幕... 电脑的主人今天似乎没有去上班，他是谁？那个女孩是谁？真相又是什么？</p>
-            <p>一切探索，从现在开始。</p>
+    <div class="terminal-box">
+        <div class="top-bar">
+            <span>MBCC OS v.4.0.2 // SYSTEM STATUS</span>
+            <span class="user-status">CURRENT USER: <span style="color:#ff4d4d">CHIEF</span></span>
         </div>
 
-        <div class="guide-box">
-            <strong>🎮 玩法指南：</strong><br>
-            1. 浏览电脑中的文件寻找线索。<br>
-            2. 注意带有 <span class="highlight-blue">颜色标注</span> 的信息，那可能是解密的关键。<br>
-            3. 善用浏览器的 <span class="highlight-blue">搜索框</span>，输入关键词可能会获得意想不到的线索。
-        </div>
+        <div class="content-area">
+            <h1>[ INCOMING MESSAGE ]</h1>
 
-        <button class="btn-start" onclick="startGame()">开始连接</button>
+            <div class="story-text">
+                <p>> 感谢体验本游戏！身份确认：<strong>MBCC 局长</strong>。</p>
+
+                <p>> 检测到空间异常... 一个陌生女孩将你强制传送至当前坐标。一阵强烈的眩晕过后，你发现意识已<span class="highlight-red">【被困在电脑里】</span>。</p>
+
+                <p>> 女孩的声音在耳边回荡：“我们的局长大人最擅长探案了不是吗？好好找吧，你会接触到<span class="highlight-red">【世界的真相】</span>。”</p>
+
+                <p>> 你强迫自己冷静下来好好思考，你正处于一台陌生终端前... 电脑的主人今日缺勤。陌生女孩的身份、世界的真相（？），一切线索已隐藏于数据之中。</p>
+            </div>
+
+            <div class="guide-box">
+                <div style="color:#ff4d4d; margin-bottom:5px;"> MISSION OBJECTIVE (玩法指南)</div>
+                1. 浏览电脑文件寻找线索。<br>
+                2. 注意 <span style="color:#fff; border-bottom:1px solid #555;">颜色标注</span> 的信息，可能是解密的关键。<br>
+                3. 善用 <span style="color:#fff; border-bottom:1px solid #555;">搜索框</span>，输入关键词可能获取隐藏信息。
+            </div>
+
+            <button class="btn-start" onclick="startGame()">
+                [ INITIALIZE LINK / 开始连接 ]
+            </button>
+        </div>
     </div>
 
     <script>
         function startGame() {
-            // ★★★ 自动重置功能 ★★★
-            // 只要玩家是从这个页面开始的，就自动清除之前的解锁记录
-            // 这样就不用手动按 F12 清除了！
+            // ★★★ 核心逻辑：清除旧缓存，让游戏重置 ★★★
             localStorage.removeItem('unlock_hidden_folder');
 
-            // 可以在这里加一个简单的音效或者过渡
-            // ...
-
-            // 跳转到你的主游戏文件
-            // ★★★ 请确保你原来的文件名改成了 desktop.html ★★★
-            // 如果你的主文件叫 index.html，请把它改成 desktop.html
-            // 或者把下面这行改成 window.location.href = '你的主文件名.html';
+            // 简单的音效模拟（视觉上按钮变色已经有了）
+            // 跳转到桌面页面
+            // 请确保你的主游戏文件已重命名为 desktop.html
             window.location.href = 'desktop.html';
         }
     </script>
