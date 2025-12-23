@@ -476,6 +476,9 @@
         const viewedFiles = new Set();
         let finaleTriggered = false;
 
+        // 智能检测：触摸设备还是鼠标设备
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
         renderFiles('root');
 
         // 渲染文件列表
@@ -497,11 +500,22 @@
                 el.className = 'file-item';
                 el.innerHTML = `<div class="f-icon">${getIcon(item)}</div><div class="f-name">${item.name}</div>`;
 
-                el.ondblclick = () => openItem(key);
-                el.onclick = () => {
-                    document.querySelectorAll('.file-item').forEach(e => e.classList.remove('selected'));
-                    el.classList.add('selected');
-                };
+                // 根据设备类型选择打开方式
+                if (isTouchDevice) {
+                    // 触摸设备：单击打开
+                    el.onclick = () => {
+                        document.querySelectorAll('.file-item').forEach(e => e.classList.remove('selected'));
+                        el.classList.add('selected');
+                        openItem(key);
+                    };
+                } else {
+                    // 鼠标设备：双击打开
+                    el.ondblclick = () => openItem(key);
+                    el.onclick = () => {
+                        document.querySelectorAll('.file-item').forEach(e => e.classList.remove('selected'));
+                        el.classList.add('selected');
+                    };
+                }
                 container.appendChild(el);
             });
         }
