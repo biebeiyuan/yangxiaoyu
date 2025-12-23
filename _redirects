@@ -1,0 +1,7 @@
+# Cloudflare Pages Redirects
+
+# 404页面处理 - 如果有404.html的话
+# /404.html 404
+
+# SPA路由支持（如果需要的话）
+# /* /index.html 200
