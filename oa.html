@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OA 协同办公系统</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -155,7 +156,7 @@
             <div style="display:flex; gap:15px; color:#666;">
                 <span>─</span>
                 <span>□</span>
-                <span style="cursor:pointer; font-size:18px;" onclick="window.location.href='index.html'"
+                <span style="cursor:pointer; font-size:18px;" onclick="window.location.href='desktop.html'"
                     class="close-btn">×</span>
             </div>
         </div>
@@ -211,7 +212,8 @@
                         </table>
                         <div style="margin-top:30px; text-align:center;">
                             <button class="btn" style="width:100px; background:#ccc; cursor:not-allowed;">发送</button>
-                            <button class="btn" style="width:100px;" onclick="alert('驳回了你的请假申请：请上传正确病例');">保存</button>
+                            <button class="btn" style="width:100px;"
+                                onclick="alert('驳回了你的请假申请：病例与病情不符合，请检查');">保存</button>
                         </div>
                     </div>
                 </div>

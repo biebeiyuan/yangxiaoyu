@@ -3,16 +3,149 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>User_Y - Desktop</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* === 默认电脑端样式 (保持你原有的逻辑) === */
+        /* 你可以在 style.css 里写具体的电脑样式 */
+        /* 这里我只写一些基础的，确保布局不出错 */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-size: cover;
+            user-select: none;
+        }
+
+        .desktop-icons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            /* 电脑端默认竖着排 */
+            gap: 20px;
+        }
+
+        .icon {
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon-img {
+            font-size: 40px;
+        }
+
+        .icon-text {
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 1px 2px black;
+        }
+
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .win-start {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .task-right {
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+
+        /* === ★★★ 核心修改 2：手机端自动适配代码 ★★★ === */
+        /* 这段代码只有在屏幕宽度小于 768px (手机/窄平板) 时才会生效 */
+        @media screen and (max-width: 768px) {
+
+            /* 1. 调整桌面图标布局：手机上改成横向自动换行，不然竖着排会挡住 */
+            .desktop-icons {
+                flex-direction: row;
+                /* 改为横向 */
+                flex-wrap: wrap;
+                /* 允许换行 */
+                top: 60px;
+                /* 往下挪一点，避开手机刘海 */
+                left: 10px;
+                width: 100%;
+                gap: 15px;
+            }
+
+            /* 2. 增大图标触控区域，方便手指点击 */
+            .icon {
+                width: 70px;
+                /* 稍微调小一点宽度以适应窄屏 */
+                margin-bottom: 10px;
+            }
+
+            .icon-text {
+                font-size: 12px;
+                /* 字体改小一点 */
+            }
+
+            /* 3. ★★★ 关键：强制让打开的应用窗口在手机上全屏 ★★★ */
+            /* 不管你在 onclick 里写的是 800 还是 1000，
+               手机上都会被这段 CSS 强制改为全屏，
+               解决“手机显示不全”的问题。
+               (假设你的弹窗 ID 是 app-window-modal 或者 class 是 window-box) 
+            */
+            #app-window-modal,
+            .window-container,
+            iframe {
+                width: 100vw;
+                /* 强制宽度 100% */
+                height: calc(100vh - 40px);
+                /* 强制高度 (减去任务栏) */
+                top: 0;
+                left: 0;
+                transform: none;
+                /* 取消居中位移 */
+                border: none;
+                border-radius: 0;
+            }
+
+            /* 4. 任务栏稍微调大一点，防误触 */
+            .taskbar {
+                height: 50px;
+            }
+
+            .win-start {
+                font-size: 24px;
+                padding: 0 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- 背景壁纸 -->
-    <div class="wallpaper"></div>
+    <div class="wallpaper"
+        style="position:fixed; top:0; left:0; width:100%; height:100%; background: url('bg.jpg') center/cover; z-index:-1;">
+    </div>
 
-    <!-- 桌面图标 -->
     <div class="desktop-icons">
         <div class="icon" onclick="openApp('computer.html', 800, 500)">
             <div class="icon-img pc-icon">💻</div>
@@ -40,7 +173,6 @@
         </div>
     </div>
 
-    <!-- 底部任务栏 -->
     <div class="taskbar">
         <div class="win-start">⊞</div>
         <div class="task-right">
@@ -49,7 +181,6 @@
         </div>
     </div>
 
-    <!-- 引入脚本 -->
     <script src="script.js"></script>
 </body>
 
